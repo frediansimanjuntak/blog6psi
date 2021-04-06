@@ -34,8 +34,11 @@ gem 'devise'
 # Token Auth
 gem 'jwt'
 
-#devise with JWT
+# devise with JWT
 gem 'devise-jwt'
+
+# environtment file to save key
+gem 'dotenv-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
