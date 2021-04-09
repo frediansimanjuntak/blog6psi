@@ -9,7 +9,11 @@ class ArticlesController < ApplicationController
 
   # show detail data GET /articles/:id
   def show
-    render json: {status:"success", data: @article}
+    if @article.present?
+      render json: {status:"success", data: @article}
+    else
+      render json: {status:"failed", data: @article.errors}
+    end
   end
 
   # create data POST /articles
@@ -24,18 +28,32 @@ class ArticlesController < ApplicationController
 
   # update data PUT /articles/:id
   def update
-    
+    @article.update(article_params)
+    if @article
+      render json: {status:"success", data: @article}      
+    else
+      render json: {status:"failed", messages: @article.errors}  
+    end
   end
 
   # destroy data DELETE /articles/:id
   def destroy
-    
+    @article.destroy
+    if @article
+      render json: {status:"success", messages: "Article deleted successfully"}      
+    else
+      render json: {status:"failed", messages: @article.errors}  
+    end
   end
 
   private
 
   def find_articles
-    @article = Article.find(params[:id])
+    begin      
+      @article = Article.find(params[:id])
+    rescue => exception
+      render json: {status:"failed", messages: exception} 
+    end
   end
 
   def article_params
